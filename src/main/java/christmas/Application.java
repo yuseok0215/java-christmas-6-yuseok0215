@@ -5,6 +5,7 @@ import java.text.DecimalFormat;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.format.TextStyle;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -24,7 +25,7 @@ public class Application {
         announceOrderMenu(menuNameAndQuantity);
 
         System.out.println("<할인 전 총주문 금액>");
-        announceTotalPriceBeforeDiscount(menuNameAndQuantity);
+        int totalPriceBeforeDiscount = announceTotalPriceBeforeDiscount(menuNameAndQuantity);
 
         // 할인 금액을 구해보자!
         int discountPrice = 0;
@@ -35,6 +36,22 @@ public class Application {
 
         discountPrice +=  christmasGeneralDiscount(visitDate, menuNameAndQuantity, dayOfWeekKorean);
 
+        System.out.println("<증정 메뉴>");
+        List<String> presentationMenu = new ArrayList<>();
+        if (totalPriceBeforeDiscount >= 120000) {
+            presentationMenu.add("샴페인");
+        }
+        if (discountPrice >= 20000) {
+            presentationMenu.add("산타");
+        } else if (discountPrice >= 10000) {
+            presentationMenu.add("트리");
+        } else if (discountPrice >= 5000) {
+            presentationMenu.add("별");
+        }
+
+        for (String item : presentationMenu) {
+            System.out.println(item + " 1개");
+        }
         // 삼페인, 배지에 대한 증정 메뉴 알려주기
 
     }
@@ -77,11 +94,12 @@ public class Application {
         return 0;
     }
 
-    private static void announceTotalPriceBeforeDiscount(Map<String, Integer> menuNameAndQuantity) {
+    private static int announceTotalPriceBeforeDiscount(Map<String, Integer> menuNameAndQuantity) {
         int totalPriceBeforeDiscount = getTotalPriceBeforeDiscount(menuNameAndQuantity);
         DecimalFormat decimalFormat = new DecimalFormat("#,###");
         String formattedPrice = decimalFormat.format(totalPriceBeforeDiscount);
         System.out.println(formattedPrice + "원");
+        return totalPriceBeforeDiscount;
     }
 
     private static int getTotalPriceBeforeDiscount(Map<String, Integer> menuNameAndQuantity) {

@@ -2,10 +2,18 @@ package christmas;
 
 import camp.nextstep.edu.missionutils.Console;
 import java.text.DecimalFormat;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.format.TextStyle;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 public class Application {
+    public static final int year = 2023;
+    public static final int month = 12;
+
     public static void main(String[] args) {
         System.out.println("안녕하세요! 우테코 식당 12월 이벤트 플래너입니다.");
         int visitDate = requestVisitDate();
@@ -17,13 +25,49 @@ public class Application {
 
         System.out.println("<할인 전 총주문 금액>");
         announceTotalPriceBeforeDiscount(menuNameAndQuantity);
-        
+
         // 할인 금액을 구해보자!
         int discountPrice = 0;
         discountPrice += christmasDdayDiscount(visitDate);
 
+        DayOfWeek dayOfWeek = getDayOfWeek(visitDate);
+        String dayOfWeekKorean = dayOfWeek.getDisplayName(TextStyle.FULL, Locale.KOREAN); // 요일 알려주기
+
+        discountPrice +=  christmasGeneralDiscount(visitDate, menuNameAndQuantity, dayOfWeekKorean);
+
         // 삼페인, 배지에 대한 증정 메뉴 알려주기
 
+    }
+
+    private static int christmasGeneralDiscount(int visitDate, Map<String, Integer> menuNameAndQuantity, String dayOfWeekKorean) {
+        int discountPrice = 0;
+        for (Map.Entry<String, Integer> entry : menuNameAndQuantity.entrySet()) {
+            String menuName = entry.getKey();
+            Integer menuQuantity = entry.getValue();
+
+            String menuCategory = Menu.getMenuCategory(menuName);
+            if (dayOfWeekKorean.equals("월요일") || dayOfWeekKorean.equals("화요일") || dayOfWeekKorean.equals("수요일") || dayOfWeekKorean.equals("목요일")) {
+                if (menuCategory.equals("Dessert")) {
+                    discountPrice += 2023 * menuQuantity;
+                }
+            }
+
+            if (dayOfWeekKorean.equals("금요일") || dayOfWeekKorean.equals("토요일")) {
+                if (menuCategory.equals("Main")) {
+                    discountPrice += 2023 * menuQuantity;
+                }
+            }
+
+            List<Integer> starDays = List.of(3, 10, 17, 24, 25);
+            if (starDays.contains(visitDate)) {
+                discountPrice += 1000;
+            }
+        }
+        return discountPrice;
+    }
+
+    private static DayOfWeek getDayOfWeek(int day) {
+        return LocalDate.of(year, month, day).getDayOfWeek();
     }
 
     private static int christmasDdayDiscount(int visitDate) {

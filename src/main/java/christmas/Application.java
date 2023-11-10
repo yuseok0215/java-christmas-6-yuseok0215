@@ -1,6 +1,7 @@
 package christmas;
 
 import camp.nextstep.edu.missionutils.Console;
+import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -14,7 +15,29 @@ public class Application {
         System.out.println("12월 3일에 우테코 식당에서 받을 이벤트 혜택 미리 보기!");
         announceOrderMenu(menuNameAndQuantity);
 
+        System.out.println("<할인 전 총주문 금액>");
 
+        announceTotalPriceBeforeDiscount(menuNameAndQuantity);
+
+
+    }
+
+    private static void announceTotalPriceBeforeDiscount(Map<String, Integer> menuNameAndQuantity) {
+        int totalPriceBeforeDiscount = getTotalPriceBeforeDiscount(menuNameAndQuantity);
+        DecimalFormat decimalFormat = new DecimalFormat("#,###");
+        String formattedPrice = decimalFormat.format(totalPriceBeforeDiscount);
+        System.out.println(formattedPrice + "원");
+    }
+
+    private static int getTotalPriceBeforeDiscount(Map<String, Integer> menuNameAndQuantity) {
+        int totalPriceBeforeDiscount = 0;
+        for (Map.Entry<String, Integer> entry : menuNameAndQuantity.entrySet()) {
+            String menuName = entry.getKey();
+            int menuPrice = Menu.getMenuByName(menuName) * entry.getValue();
+
+            totalPriceBeforeDiscount += menuPrice;
+        }
+        return totalPriceBeforeDiscount;
     }
 
     private static void announceOrderMenu(Map<String, Integer> menuNameAndQuantity) {

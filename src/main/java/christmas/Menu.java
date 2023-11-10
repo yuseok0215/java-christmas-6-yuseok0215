@@ -10,7 +10,7 @@ public enum Menu {
     바비큐립(54000),
     해산물파스타(35000),
     크리스마스파스타(25000),
-    초코케이크(1500),
+    초코케이크(15000),
     아이스크림(5000),
     제로콜라(3000),
     레드와인(60000),
@@ -26,6 +26,11 @@ public enum Menu {
         return price;
     }
 
-
-
+    public static int getMenuByName(String name) {
+        return Arrays.stream(Menu.values())
+                .filter(menu -> menu.name().equals(name))
+                .findFirst()
+                .map(Menu::getPrice)
+                .orElse(-1);
+    }
 }

@@ -9,10 +9,25 @@ public class Application {
         System.out.println("안녕하세요! 우테코 식당 12월 이벤트 플래너입니다.");
         int visitDate = requestVisitDate();
 
-        Map<String, Integer> menuNameAndQuantity = getMenuNameAndQuantity();
+        Map<String,Integer> menuNameAndQuantity = getMenuNameAndQuantity(); // 메뉴 입력
+
+        System.out.println("12월 3일에 우테코 식당에서 받을 이벤트 혜택 미리 보기!");
+        announceOrderMenu(menuNameAndQuantity);
+
+
     }
 
-    private static Map<String, Integer> getMenuNameAndQuantity() {
+    private static void announceOrderMenu(Map<String, Integer> menuNameAndQuantity) {
+        System.out.println("<주문 메뉴>");
+
+        for (Map.Entry<String, Integer> entry : menuNameAndQuantity.entrySet()) {
+            String menuName = entry.getKey();
+            Integer menuQuantity = entry.getValue();
+            System.out.println(menuName + " " + menuQuantity + "개");
+        }
+    }
+
+    private static Map<String,Integer> getMenuNameAndQuantity() {
         try {
             return requestMenuNameAndQuantity();
         } catch (IllegalArgumentException e) {
@@ -21,7 +36,7 @@ public class Application {
         }
     }
 
-    private static Map<String, Integer> requestMenuNameAndQuantity() {
+    private static Map<String,Integer> requestMenuNameAndQuantity() {
         Map<String, Integer> menuNameAndQuantity = new HashMap<>();
 
         System.out.println("주문하실 메뉴를 메뉴와 개수를 알려주세요. (e.g. 해산물파스타-2,레드와인-1,초코케이크-1");

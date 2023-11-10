@@ -16,10 +16,21 @@ public class Application {
         announceOrderMenu(menuNameAndQuantity);
 
         System.out.println("<할인 전 총주문 금액>");
-
         announceTotalPriceBeforeDiscount(menuNameAndQuantity);
+        
+        // 할인 금액을 구해보자!
+        int discountPrice = 0;
+        discountPrice += christmasDdayDiscount(visitDate);
 
+        // 삼페인, 배지에 대한 증정 메뉴 알려주기
 
+    }
+
+    private static int christmasDdayDiscount(int visitDate) {
+        if(visitDate >= 1 && visitDate <= 25) {
+            return (1000 + (visitDate - 1) * 100);
+        }
+        return 0;
     }
 
     private static void announceTotalPriceBeforeDiscount(Map<String, Integer> menuNameAndQuantity) {

@@ -7,6 +7,7 @@ import java.time.LocalDate;
 import java.time.format.TextStyle;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -27,57 +28,93 @@ public class Application {
         System.out.println("<할인 전 총주문 금액>");
         int totalPriceBeforeDiscount = announceTotalPriceBeforeDiscount(menuNameAndQuantity);
 
+        Map<String, Integer> discountAmount = new LinkedHashMap<>();
+
         // 할인 금액을 구해보자!
-        int discountPrice = 0;
-        discountPrice += christmasDdayDiscount(visitDate);
+        int christmasDdayDiscountAmount = christmasDdayDiscount(visitDate);
+        discountAmount.put("크리스마스 디데이 할인", christmasDdayDiscountAmount);
 
         DayOfWeek dayOfWeek = getDayOfWeek(visitDate);
         String dayOfWeekKorean = dayOfWeek.getDisplayName(TextStyle.FULL, Locale.KOREAN); // 요일 알려주기
 
-        discountPrice +=  christmasGeneralDiscount(visitDate, menuNameAndQuantity, dayOfWeekKorean);
+        discountAmount.put("평일 할인", weekdayDiscount(menuNameAndQuantity, dayOfWeekKorean));
+        discountAmount.put("주말 할인", weekendDiscount(menuNameAndQuantity, dayOfWeekKorean));
+        discountAmount.put("특별 할인", specialDiscount(visitDate));
 
+        // 삼페인, 배지에 대한 증정 메뉴 알려주기
         System.out.println("<증정 메뉴>");
         List<String> presentationMenu = new ArrayList<>();
         if (totalPriceBeforeDiscount >= 120000) {
             presentationMenu.add("샴페인");
+            discountAmount.put("증정 이벤트", 25000);
         }
-        if (discountPrice >= 20000) {
+
+        int totalDiscountPrice = discountAmount.values().stream()
+                .mapToInt(Integer::intValue)
+                .sum();
+
+        if (totalDiscountPrice >= 20000) {
             presentationMenu.add("산타");
-        } else if (discountPrice >= 10000) {
+        } else if (totalDiscountPrice >= 10000) {
             presentationMenu.add("트리");
-        } else if (discountPrice >= 5000) {
+        } else if (totalDiscountPrice >= 5000) {
             presentationMenu.add("별");
         }
 
         for (String item : presentationMenu) {
             System.out.println(item + " 1개");
         }
-        // 삼페인, 배지에 대한 증정 메뉴 알려주기
+
+        DecimalFormat decimalFormat = new DecimalFormat("#,###");
+        System.out.println("<혜택내역>");
+        discountAmount.entrySet().stream()
+                .filter(entry -> entry.getValue() != 0)
+                .forEach(entry -> {
+                    String formattedValue = decimalFormat.format(entry.getValue());
+                    System.out.println(entry.getKey() + ": -" + formattedValue + "원");
+                });
+
 
     }
 
-    private static int christmasGeneralDiscount(int visitDate, Map<String, Integer> menuNameAndQuantity, String dayOfWeekKorean) {
+    private static int specialDiscount(int visitDate) {
+        List<Integer> starDays = List.of(3, 10, 17, 24, 25);
+        if (starDays.contains(visitDate)) {
+            return 1000;
+        }
+        return 0;
+    }
+
+    private static int weekendDiscount(Map<String, Integer> menuNameAndQuantity, String dayOfWeekKorean) {
         int discountPrice = 0;
-        for (Map.Entry<String, Integer> entry : menuNameAndQuantity.entrySet()) {
-            String menuName = entry.getKey();
-            Integer menuQuantity = entry.getValue();
+        if (dayOfWeekKorean.equals("금요일") || dayOfWeekKorean.equals("토요일")) {
+            for (Map.Entry<String, Integer> entry : menuNameAndQuantity.entrySet()) {
+                String menuName = entry.getKey();
+                Integer menuQuantity = entry.getValue();
 
-            String menuCategory = Menu.getMenuCategory(menuName);
-            if (dayOfWeekKorean.equals("월요일") || dayOfWeekKorean.equals("화요일") || dayOfWeekKorean.equals("수요일") || dayOfWeekKorean.equals("목요일")) {
-                if (menuCategory.equals("Dessert")) {
-                    discountPrice += 2023 * menuQuantity;
-                }
-            }
+                String menuCategory = Menu.getMenuCategory(menuName);
 
-            if (dayOfWeekKorean.equals("금요일") || dayOfWeekKorean.equals("토요일")) {
                 if (menuCategory.equals("Main")) {
                     discountPrice += 2023 * menuQuantity;
                 }
             }
+        }
+        return discountPrice;
+    }
 
-            List<Integer> starDays = List.of(3, 10, 17, 24, 25);
-            if (starDays.contains(visitDate)) {
-                discountPrice += 1000;
+    private static int weekdayDiscount(Map<String, Integer> menuNameAndQuantity, String dayOfWeekKorean) {
+        int discountPrice = 0;
+        if (dayOfWeekKorean.equals("일요일") || dayOfWeekKorean.equals("월요일") || dayOfWeekKorean.equals("화요일") || dayOfWeekKorean.equals("수요일")
+                || dayOfWeekKorean.equals("목요일")) {
+            for (Map.Entry<String, Integer> entry : menuNameAndQuantity.entrySet()) {
+                String menuName = entry.getKey();
+                Integer menuQuantity = entry.getValue();
+
+                String menuCategory = Menu.getMenuCategory(menuName);
+
+                if (menuCategory.equals("Dessert")) {
+                    discountPrice += 2023 * menuQuantity;
+                }
             }
         }
         return discountPrice;

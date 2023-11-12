@@ -43,9 +43,8 @@ public class Application {
 
         // 삼페인, 배지에 대한 증정 메뉴 알려주기
         System.out.println("<증정 메뉴>");
-        List<String> presentationMenu = new ArrayList<>();
         if (totalPriceBeforeDiscount >= 120000) {
-            presentationMenu.add("샴페인");
+            System.out.println("샴페인 1개");
             discountAmount.put("증정 이벤트", 25000);
         }
 
@@ -53,17 +52,6 @@ public class Application {
                 .mapToInt(Integer::intValue)
                 .sum();
 
-        if (totalDiscountPrice >= 20000) {
-            presentationMenu.add("산타");
-        } else if (totalDiscountPrice >= 10000) {
-            presentationMenu.add("트리");
-        } else if (totalDiscountPrice >= 5000) {
-            presentationMenu.add("별");
-        }
-
-        for (String item : presentationMenu) {
-            System.out.println(item + " 1개");
-        }
 
         DecimalFormat decimalFormat = new DecimalFormat("#,###");
         System.out.println("<혜택내역>");
@@ -74,7 +62,18 @@ public class Application {
                     System.out.println(entry.getKey() + ": -" + formattedValue + "원");
                 });
 
+        System.out.println("<총혜택 금액>");
+        System.out.println("-" + decimalFormat.format(totalDiscountPrice) + "원");
 
+
+
+//        if (totalDiscountPrice >= 20000) {
+//            presentationMenu.add("산타");
+//        } else if (totalDiscountPrice >= 10000) {
+//            presentationMenu.add("트리");
+//        } else if (totalDiscountPrice >= 5000) {
+//            presentationMenu.add("별");
+//        }
     }
 
     private static int specialDiscount(int visitDate) {

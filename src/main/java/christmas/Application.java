@@ -48,9 +48,13 @@ public class Application {
             discountAmount.put("증정 이벤트", 25000);
         }
 
-        int totalDiscountPrice = discountAmount.entrySet().stream()
+        int totalPaymentDiscountPrice = discountAmount.entrySet().stream()
                 .filter(entry -> !entry.getKey().equals("증정 이벤트"))
                 .mapToInt(Map.Entry::getValue)
+                .sum();
+
+        int totalDiscountPrice = discountAmount.values().stream()
+                .mapToInt(Integer::intValue)
                 .sum();
 
 
@@ -67,18 +71,19 @@ public class Application {
         System.out.println("-" + decimalFormat.format(totalDiscountPrice) + "원");
 
         System.out.println("<할인 후 예상 결제 금액>");
-        System.out.println(decimalFormat.format(totalPriceBeforeDiscount - totalDiscountPrice) + "원");
+        System.out.println(decimalFormat.format(totalPriceBeforeDiscount - totalPaymentDiscountPrice) + "원");
+
+        System.out.println("<12월 이벤트 배지>");
+        if (totalDiscountPrice >= 20000) {
+            System.out.println("산타");
+        } else if (totalDiscountPrice >= 10000) {
+            System.out.println("트리");
+        } else if (totalDiscountPrice >= 5000) {
+            System.out.println("별");
+        }
 
 
 
-
-//        if (totalDiscountPrice >= 20000) {
-//            presentationMenu.add("산타");
-//        } else if (totalDiscountPrice >= 10000) {
-//            presentationMenu.add("트리");
-//        } else if (totalDiscountPrice >= 5000) {
-//            presentationMenu.add("별");
-//        }
     }
 
     private static int specialDiscount(int visitDate) {

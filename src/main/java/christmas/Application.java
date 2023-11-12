@@ -48,8 +48,9 @@ public class Application {
             discountAmount.put("증정 이벤트", 25000);
         }
 
-        int totalDiscountPrice = discountAmount.values().stream()
-                .mapToInt(Integer::intValue)
+        int totalDiscountPrice = discountAmount.entrySet().stream()
+                .filter(entry -> !entry.getKey().equals("증정 이벤트"))
+                .mapToInt(Map.Entry::getValue)
                 .sum();
 
 
@@ -64,6 +65,10 @@ public class Application {
 
         System.out.println("<총혜택 금액>");
         System.out.println("-" + decimalFormat.format(totalDiscountPrice) + "원");
+
+        System.out.println("<할인 후 예상 결제 금액>");
+        System.out.println(decimalFormat.format(totalPriceBeforeDiscount - totalDiscountPrice) + "원");
+
 
 
 

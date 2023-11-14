@@ -1,25 +1,22 @@
 package christmas;
 
+import christmas.domain.discount.Discount;
 import christmas.domain.ReservationInfo;
+import christmas.domain.discount.DiscountCategory;
 import christmas.view.Input;
 import christmas.view.Output;
 import java.text.DecimalFormat;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.format.TextStyle;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
 public class Application {
-    public static final int year = 2023;
-    public static final int month = 12;
+
 
     public static void main(String[] args) {
-//        int visitDate = requestVisitDate();
-//        Map<String,Integer> menuNameAndQuantity = requestMenuNameAndQuantity();
-
         ReservationInfo reservationInfo = new ReservationInfo(requestVisitDate(), requestMenuNameAndQuantity());
 
         Input.announceEventBenefitPreview();
@@ -28,57 +25,32 @@ public class Application {
         int totalPriceBeforeDiscount = getTotalPriceBeforeDiscount(reservationInfo.getMenuAndQuantity());
         Output.announceOrderAmountBeforeDiscount(totalPriceBeforeDiscount);
 
+        Discount discount = new Discount(new DiscountCategory(), reservationInfo);
 
-        Map<String, Integer> discountAmount = new LinkedHashMap<>();
-
-        // 할인 금액을 구해보자!
-        int christmasDdayDiscountAmount = christmasDdayDiscount(reservationInfo.getVisitDate());
-        discountAmount.put("크리스마스 디데이 할인", christmasDdayDiscountAmount);
-
-        DayOfWeek dayOfWeek = getDayOfWeek(reservationInfo.getVisitDate());
-        String dayOfWeekKorean = dayOfWeek.getDisplayName(TextStyle.FULL, Locale.KOREAN); // 요일 알려주기
-
-        discountAmount.put("평일 할인", weekdayDiscount(reservationInfo.getMenuAndQuantity(), dayOfWeekKorean));
-        discountAmount.put("주말 할인", weekendDiscount(reservationInfo.getMenuAndQuantity(), dayOfWeekKorean));
-        discountAmount.put("특별 할인", specialDiscount(reservationInfo.getVisitDate()));
+        discount.updateChristmasDdayDiscount();
+        discount.updateWeekdayDiscount();
+        discount.updateWeekendDiscount();
+        discount.updateSpecialDiscount();
+        discount.updatePresentationDiscount(totalPriceBeforeDiscount);
 
         // 삼페인, 배지에 대한 증정 메뉴 알려주기\
-        System.out.println("\n<증정 메뉴>");
-        if (totalPriceBeforeDiscount >= 120000) {
-            discountAmount.put("증정 이벤트", 25000);
+        if (discount.hasPresentationMenu("증정 이벤트")) {
             Output.announcePresentChampagne();
-        }
-        if (totalPriceBeforeDiscount < 120000) {
+        } else if (!discount.hasPresentationMenu("증정 이벤트")) {
             Output.announcePresentAbsence();
         }
 
-        int totalPaymentDiscountPrice = discountAmount.entrySet().stream()
-                .filter(entry -> !entry.getKey().equals("증정 이벤트"))
-                .mapToInt(Map.Entry::getValue)
-                .sum();
-
-        int totalDiscountPrice = discountAmount.values().stream()
-                .mapToInt(Integer::intValue)
-                .sum();
-
-
         System.out.println("\n<혜택내역>");
-        DecimalFormat decimalFormat = new DecimalFormat("#,###");
-        discountAmount.entrySet().stream()
-                .filter(entry -> entry.getValue() != 0)
-                .forEach(entry -> {
-                    String formattedValue = decimalFormat.format(entry.getValue());
-                    Output.announceBenefits(entry, formattedValue);
-                });
+        Map<String, String> benefitDetails = discount.getBenefitDetails();
+        benefitDetails.entrySet().stream()
+                        .forEach(entry -> Output.announceBenefits(entry.getKey(), entry.getValue()));
 
-        System.out.println("\n<총혜택 금액>");
-        Output.announceTotalBenefitAmount(decimalFormat.format(totalDiscountPrice));
+        Output.announceTotalBenefitAmount(discount.getTotalDiscountPrice());
 
-        System.out.println("<\n할인 후 예상 결제 금액>");
-        Output.announcePaymentAmountAfterDiscount(decimalFormat.format(totalPriceBeforeDiscount - totalPaymentDiscountPrice));
+        Output.announcePaymentAmountAfterDiscount(discount.getPaymentAmount(totalPriceBeforeDiscount));
 
-        System.out.println("<\n12월 이벤트 배지>");
-        Output.announceEventBadge(totalDiscountPrice);
+
+        Output.announceEventBadge(discount.getEventBadge());
     }
 
     private static int requestVisitDate() {
@@ -92,60 +64,6 @@ public class Application {
         } catch (IllegalArgumentException e) {
             return requestMenuNameAndQuantity();
         }
-    }
-
-    private static int specialDiscount(int visitDate) {
-        List<Integer> starDays = List.of(3, 10, 17, 24, 25);
-        if (starDays.contains(visitDate)) {
-            return 1000;
-        }
-        return 0;
-    }
-
-    private static int weekendDiscount(Map<String, Integer> menuNameAndQuantity, String dayOfWeekKorean) {
-        int discountPrice = 0;
-        if (dayOfWeekKorean.equals("금요일") || dayOfWeekKorean.equals("토요일")) {
-            for (Map.Entry<String, Integer> entry : menuNameAndQuantity.entrySet()) {
-                String menuName = entry.getKey();
-                Integer menuQuantity = entry.getValue();
-
-                String menuCategory = Menu.getMenuCategory(menuName);
-
-                if (menuCategory.equals("Main")) {
-                    discountPrice += 2023 * menuQuantity;
-                }
-            }
-        }
-        return discountPrice;
-    }
-
-    private static int weekdayDiscount(Map<String, Integer> menuNameAndQuantity, String dayOfWeekKorean) {
-        int discountPrice = 0;
-        if (dayOfWeekKorean.equals("일요일") || dayOfWeekKorean.equals("월요일") || dayOfWeekKorean.equals("화요일") || dayOfWeekKorean.equals("수요일")
-                || dayOfWeekKorean.equals("목요일")) {
-            for (Map.Entry<String, Integer> entry : menuNameAndQuantity.entrySet()) {
-                String menuName = entry.getKey();
-                Integer menuQuantity = entry.getValue();
-
-                String menuCategory = Menu.getMenuCategory(menuName);
-
-                if (menuCategory.equals("Dessert")) {
-                    discountPrice += 2023 * menuQuantity;
-                }
-            }
-        }
-        return discountPrice;
-    }
-
-    private static DayOfWeek getDayOfWeek(int day) {
-        return LocalDate.of(year, month, day).getDayOfWeek();
-    }
-
-    private static int christmasDdayDiscount(int visitDate) {
-        if(visitDate >= 1 && visitDate <= 25) {
-            return (1000 + (visitDate - 1) * 100);
-        }
-        return 0;
     }
 
     private static int TotalPriceBeforeDiscount(Map<String, Integer> menuNameAndQuantity) {

@@ -33,7 +33,7 @@ public enum Menu {
                 .filter(menu -> menu.name().equals(menuName))
                 .findFirst()
                 .map(Menu::getPrice)
-                .orElse(-1);
+                .orElse(0);
     }
 
     public static String getMenuCategory(String menuName) {
@@ -41,6 +41,11 @@ public enum Menu {
                 .filter(menu -> menu.name().equals(menuName))
                 .findFirst()
                 .map(menu -> menu.category)
-                .orElse("Not Found"); // Optional을 주고 뺄지 나중에 리팩토링 할때 고민해보자.
+                .orElse(null);
+    }
+
+    public static boolean isMenuValid(String inputMenu) {
+        return Arrays.stream(Menu.values())
+                .anyMatch(menu -> menu.name().equalsIgnoreCase(inputMenu));
     }
 }

@@ -1,5 +1,6 @@
 package christmas.view;
 
+import christmas.message.ErrorMessage;
 import java.text.DecimalFormat;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -10,8 +11,8 @@ public class Output {
         System.out.println("안녕하세요! 우테코 식당 12월 이벤트 플래너입니다.");
     }
 
-    public static void announceEventBenefitPreview() {
-        System.out.println("12월 3일에 우테코 식당에서 받을 이벤트 혜택 미리 보기!");
+    public static void announceEventBenefitPreview(int visitDate) {
+        System.out.println("12월 " + visitDate + "일에 우테코 식당에서 받을 이벤트 혜택 미리 보기!");
     }
 
     public static void announceOrderMenu(Map<String, Integer> menuNameAndQuantity) {
@@ -43,6 +44,10 @@ public class Output {
     }
 
     public static void announceBenefitDetails(Map<String, String> benefitDetails) {
+        if(benefitDetails.size() == 0) {
+            System.out.println("없음");
+            return;
+        }
         benefitDetails.entrySet().stream()
                 .forEach(entry -> announceBenefits(entry.getKey(), entry.getValue()));
     }
@@ -64,5 +69,9 @@ public class Output {
     public static void announceEventBadge(String badge) {
         System.out.println("\n<12월 이벤트 배지>");
         System.out.println(badge);
+    }
+
+    public static void announceErrorMessage(ErrorMessage errorMessage) {
+        System.out.println(errorMessage.getMessage());
     }
 }

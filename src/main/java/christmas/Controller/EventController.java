@@ -4,9 +4,9 @@ import christmas.Menu;
 import christmas.domain.ReservationInfo;
 import christmas.domain.discount.EventManager;
 import christmas.domain.discount.DiscountCategory;
+import christmas.message.ErrorMessage;
 import christmas.view.Input;
 import christmas.view.Output;
-import java.text.DecimalFormat;
 import java.util.Map;
 
 public class EventController {
@@ -14,7 +14,7 @@ public class EventController {
     public void run() {
         ReservationInfo reservationInfo = new ReservationInfo(requestVisitDate(), requestMenuNameAndQuantity());
 
-        Output.announceEventBenefitPreview();
+        Output.announceEventBenefitPreview(reservationInfo.getVisitDate());
         Output.announceOrderMenu(reservationInfo.getMenuAndQuantity());
 
         int totalPriceBeforeDiscount = getTotalPriceBeforeDiscount(reservationInfo.getMenuAndQuantity());
@@ -25,7 +25,7 @@ public class EventController {
         updateDiscount(totalPriceBeforeDiscount, discount);
         presentationEvent(discount);
 
-        System.out.println("\n<혜택내역>");
+        System.out.println("\n<혜택 내역>");
         Output.announceBenefitDetails(discount.getBenefitDetails());
         Output.announceTotalBenefitAmount(discount.getTotalDiscountPrice());
         Output.announcePaymentAmountAfterDiscount(discount.getPaymentAmount(totalPriceBeforeDiscount));
@@ -50,23 +50,23 @@ public class EventController {
 
     private static int requestVisitDate() {
         Output.announceStartEventCheck();
-        return Input.visitDate();
-    }
-
-    private static Map<String,Integer> requestMenuNameAndQuantity() {
-        try {
-            return Input.orderMenuAndQuantity();
-        } catch (IllegalArgumentException e) {
-            return requestMenuNameAndQuantity();
+        while (true) {
+            try {
+                return Input.visitDate();
+            } catch (IllegalArgumentException e) {
+                Output.announceErrorMessage(ErrorMessage.INVALID_DATE);
+            }
         }
     }
 
-    private static int TotalPriceBeforeDiscount(Map<String, Integer> menuNameAndQuantity) {
-        int totalPriceBeforeDiscount = getTotalPriceBeforeDiscount(menuNameAndQuantity);
-        DecimalFormat decimalFormat = new DecimalFormat("#,###");
-        String formattedPrice = decimalFormat.format(totalPriceBeforeDiscount);
-        System.out.println(formattedPrice + "원");
-        return totalPriceBeforeDiscount;
+    private static Map<String,Integer> requestMenuNameAndQuantity() {
+        while (true) {
+            try {
+                return Input.orderMenuAndQuantity();
+            } catch (IllegalArgumentException e) {
+                Output.announceErrorMessage(ErrorMessage.INVALID_MENU);
+            }
+        }
     }
 
     private static int getTotalPriceBeforeDiscount(Map<String, Integer> menuNameAndQuantity) {

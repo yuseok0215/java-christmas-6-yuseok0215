@@ -6,12 +6,8 @@ import christmas.domain.discount.Event.Presentation;
 import christmas.domain.discount.Event.SpecialDiscount;
 import christmas.domain.discount.Event.WeekdayDiscount;
 import christmas.domain.discount.Event.WeekendDiscount;
-import christmas.view.Output;
-import java.text.DecimalFormat;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.Map.Entry;
-import java.util.stream.Collectors;
 
 public class DiscountCategory {
 

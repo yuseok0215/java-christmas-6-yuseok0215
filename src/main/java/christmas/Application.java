@@ -1,47 +1,46 @@
 package christmas;
 
-import camp.nextstep.edu.missionutils.Console;
+import christmas.domain.ReservationInfo;
 import christmas.view.Input;
 import christmas.view.Output;
 import java.text.DecimalFormat;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.format.TextStyle;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Map.Entry;
 
 public class Application {
     public static final int year = 2023;
     public static final int month = 12;
 
     public static void main(String[] args) {
-        int visitDate = requestVisitDate();
-        Map<String,Integer> menuNameAndQuantity = getMenuNameAndQuantity();
+//        int visitDate = requestVisitDate();
+//        Map<String,Integer> menuNameAndQuantity = requestMenuNameAndQuantity();
+
+        ReservationInfo reservationInfo = new ReservationInfo(requestVisitDate(), requestMenuNameAndQuantity());
 
         Input.announceEventBenefitPreview();
-        Output.announceOrderMenu(menuNameAndQuantity);
+        Output.announceOrderMenu(reservationInfo.getMenuAndQuantity());
 
-        int totalPriceBeforeDiscount = getTotalPriceBeforeDiscount(menuNameAndQuantity);
+        int totalPriceBeforeDiscount = getTotalPriceBeforeDiscount(reservationInfo.getMenuAndQuantity());
         Output.announceOrderAmountBeforeDiscount(totalPriceBeforeDiscount);
 
 
         Map<String, Integer> discountAmount = new LinkedHashMap<>();
 
         // 할인 금액을 구해보자!
-        int christmasDdayDiscountAmount = christmasDdayDiscount(visitDate);
+        int christmasDdayDiscountAmount = christmasDdayDiscount(reservationInfo.getVisitDate());
         discountAmount.put("크리스마스 디데이 할인", christmasDdayDiscountAmount);
 
-        DayOfWeek dayOfWeek = getDayOfWeek(visitDate);
+        DayOfWeek dayOfWeek = getDayOfWeek(reservationInfo.getVisitDate());
         String dayOfWeekKorean = dayOfWeek.getDisplayName(TextStyle.FULL, Locale.KOREAN); // 요일 알려주기
 
-        discountAmount.put("평일 할인", weekdayDiscount(menuNameAndQuantity, dayOfWeekKorean));
-        discountAmount.put("주말 할인", weekendDiscount(menuNameAndQuantity, dayOfWeekKorean));
-        discountAmount.put("특별 할인", specialDiscount(visitDate));
+        discountAmount.put("평일 할인", weekdayDiscount(reservationInfo.getMenuAndQuantity(), dayOfWeekKorean));
+        discountAmount.put("주말 할인", weekendDiscount(reservationInfo.getMenuAndQuantity(), dayOfWeekKorean));
+        discountAmount.put("특별 할인", specialDiscount(reservationInfo.getVisitDate()));
 
         // 삼페인, 배지에 대한 증정 메뉴 알려주기\
         System.out.println("\n<증정 메뉴>");
@@ -63,7 +62,7 @@ public class Application {
                 .sum();
 
 
-        System.out.println("<혜택내역>");
+        System.out.println("\n<혜택내역>");
         DecimalFormat decimalFormat = new DecimalFormat("#,###");
         discountAmount.entrySet().stream()
                 .filter(entry -> entry.getValue() != 0)
@@ -72,26 +71,26 @@ public class Application {
                     Output.announceBenefits(entry, formattedValue);
                 });
 
-        System.out.println("<총혜택 금액>");
+        System.out.println("\n<총혜택 금액>");
         Output.announceTotalBenefitAmount(decimalFormat.format(totalDiscountPrice));
 
-        System.out.println("<할인 후 예상 결제 금액>");
+        System.out.println("<\n할인 후 예상 결제 금액>");
         Output.announcePaymentAmountAfterDiscount(decimalFormat.format(totalPriceBeforeDiscount - totalPaymentDiscountPrice));
 
-        System.out.println("<12월 이벤트 배지>");
+        System.out.println("<\n12월 이벤트 배지>");
         Output.announceEventBadge(totalDiscountPrice);
     }
 
     private static int requestVisitDate() {
         Output.announceStartEventCheck();
-        return Input.requestVisitDate();
+        return Input.visitDate();
     }
 
-    private static Map<String,Integer> getMenuNameAndQuantity() {
+    private static Map<String,Integer> requestMenuNameAndQuantity() {
         try {
-            return Input.requestOrderMenuAndQuantity();
+            return Input.orderMenuAndQuantity();
         } catch (IllegalArgumentException e) {
-            return getMenuNameAndQuantity();
+            return requestMenuNameAndQuantity();
         }
     }
 

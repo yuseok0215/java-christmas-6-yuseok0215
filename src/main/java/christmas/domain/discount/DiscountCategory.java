@@ -1,14 +1,14 @@
 package christmas.domain.discount;
 
-import christmas.Menu;
-import christmas.domain.discount.discountCategory.ChristmasDdayDiscount;
-import christmas.domain.discount.discountCategory.SpecialDiscount;
-import christmas.domain.discount.discountCategory.WeekdayDiscount;
-import christmas.domain.discount.discountCategory.WeekendDiscount;
+import christmas.converter.Converter;
+import christmas.domain.discount.Event.ChristmasDdayDiscount;
+import christmas.domain.discount.Event.Presentation;
+import christmas.domain.discount.Event.SpecialDiscount;
+import christmas.domain.discount.Event.WeekdayDiscount;
+import christmas.domain.discount.Event.WeekendDiscount;
 import christmas.view.Output;
 import java.text.DecimalFormat;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.stream.Collectors;
@@ -20,6 +20,7 @@ public class DiscountCategory {
     private final SpecialDiscount specialDiscount;
     private final WeekdayDiscount weekdayDiscount;
     private final WeekendDiscount weekendDiscount;
+    private final Presentation presentation;
 
     public DiscountCategory() {
         this.discountCategory = new LinkedHashMap<>();
@@ -27,6 +28,7 @@ public class DiscountCategory {
         this.specialDiscount = new SpecialDiscount();
         this.weekdayDiscount = new WeekdayDiscount();
         this.weekendDiscount = new WeekendDiscount();
+        this.presentation = new Presentation();
     }
 
     public int christmasDdayDiscount(int visitDate) {
@@ -46,26 +48,14 @@ public class DiscountCategory {
     }
 
     public int presentationDiscount(int totalPriceBeforeDiscount) {
-        if (totalPriceBeforeDiscount >= 120000) {
-            discountCategory.put("증정 이벤트", 25000);
-            Output.announcePresentChampagne();
-            return 25000;
-        }
-        return 0;
+        return presentation.presentationEvent(totalPriceBeforeDiscount, discountCategory);
     }
 
     public boolean hasPresentationEvent(String eventType) {
         return discountCategory.containsKey(eventType);
     }
 
-    public Map<String, String> convertDiscountAmount() {
-        DecimalFormat decimalFormat = new DecimalFormat("#,###");
-
-        return discountCategory.entrySet().stream()
-                .filter(entry -> entry.getValue() != 0)
-                .collect(Collectors.toMap(
-                        Entry::getKey,
-                        entry -> decimalFormat.format(entry.getValue())
-                ));
+    public Map<String, String> getDiscountAmount() {
+        return Converter.convertDiscountAmount(discountCategory);
     }
 }

@@ -1,6 +1,6 @@
 package christmas;
 
-import christmas.domain.Controller.EventController;
+import christmas.Controller.EventController;
 
 public class Application {
     public static void main(String[] args) {

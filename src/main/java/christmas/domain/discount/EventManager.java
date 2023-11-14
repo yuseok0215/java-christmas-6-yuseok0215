@@ -1,5 +1,6 @@
 package christmas.domain.discount;
 
+import christmas.converter.Converter;
 import christmas.domain.ReservationInfo;
 import java.text.DecimalFormat;
 import java.time.DayOfWeek;
@@ -8,7 +9,7 @@ import java.time.format.TextStyle;
 import java.util.Locale;
 import java.util.Map;
 
-public class Discount {
+public class EventManager {
     public static final int year = 2023;
     public static final int month = 12;
 
@@ -17,9 +18,7 @@ public class Discount {
     private final DiscountCategory discountCategory;
     private final ReservationInfo reservationInfo;
 
-    DecimalFormat decimalFormat = new DecimalFormat("#,###");
-
-    public Discount(DiscountCategory discountCategory, ReservationInfo reservationInfo) {
+    public EventManager(DiscountCategory discountCategory, ReservationInfo reservationInfo) {
         this.totalDiscountPrice = 0;
         this.totalPaymentDiscountPrice = 0;
         this.discountCategory = discountCategory;
@@ -63,15 +62,15 @@ public class Discount {
     }
 
     public Map<String, String> getBenefitDetails() {
-        return discountCategory.convertDiscountAmount();
+        return discountCategory.getDiscountAmount();
     }
 
     public String getTotalDiscountPrice() {
-        return decimalFormat.format(totalDiscountPrice);
+        return Converter.convertFormattedAmount(totalDiscountPrice);
     }
 
     public String getPaymentAmount(int totalPriceBeforeDiscount) {
-        return decimalFormat.format(totalPriceBeforeDiscount - totalPaymentDiscountPrice);
+        return Converter.convertFormattedAmount(totalPriceBeforeDiscount - totalPaymentDiscountPrice);
     }
 
     public String getEventBadge() {

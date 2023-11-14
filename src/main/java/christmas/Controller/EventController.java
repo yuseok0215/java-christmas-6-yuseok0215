@@ -1,8 +1,8 @@
-package christmas.domain.Controller;
+package christmas.Controller;
 
 import christmas.Menu;
 import christmas.domain.ReservationInfo;
-import christmas.domain.discount.Discount;
+import christmas.domain.discount.EventManager;
 import christmas.domain.discount.DiscountCategory;
 import christmas.view.Input;
 import christmas.view.Output;
@@ -14,38 +14,38 @@ public class EventController {
     public void run() {
         ReservationInfo reservationInfo = new ReservationInfo(requestVisitDate(), requestMenuNameAndQuantity());
 
-        Input.announceEventBenefitPreview();
+        Output.announceEventBenefitPreview();
         Output.announceOrderMenu(reservationInfo.getMenuAndQuantity());
 
         int totalPriceBeforeDiscount = getTotalPriceBeforeDiscount(reservationInfo.getMenuAndQuantity());
         Output.announceOrderAmountBeforeDiscount(totalPriceBeforeDiscount);
 
-        Discount discount = new Discount(new DiscountCategory(), reservationInfo);
+        EventManager discount = new EventManager(new DiscountCategory(), reservationInfo);
 
-        discount.updateChristmasDdayDiscount();
-        discount.updateWeekdayDiscount();
-        discount.updateWeekendDiscount();
-        discount.updateSpecialDiscount();
-        discount.updatePresentationDiscount(totalPriceBeforeDiscount);
+        updateDiscount(totalPriceBeforeDiscount, discount);
+        presentationEvent(discount);
 
-        // 삼페인, 배지에 대한 증정 메뉴 알려주기\
+        System.out.println("\n<혜택내역>");
+        Output.announceBenefitDetails(discount.getBenefitDetails());
+        Output.announceTotalBenefitAmount(discount.getTotalDiscountPrice());
+        Output.announcePaymentAmountAfterDiscount(discount.getPaymentAmount(totalPriceBeforeDiscount));
+        Output.announceEventBadge(discount.getEventBadge());
+    }
+
+    private void presentationEvent(EventManager discount) {
         if (discount.hasPresentationMenu("증정 이벤트")) {
             Output.announcePresentChampagne();
         } else if (!discount.hasPresentationMenu("증정 이벤트")) {
             Output.announcePresentAbsence();
         }
+    }
 
-        System.out.println("\n<혜택내역>");
-        Map<String, String> benefitDetails = discount.getBenefitDetails();
-        benefitDetails.entrySet().stream()
-                .forEach(entry -> Output.announceBenefits(entry.getKey(), entry.getValue()));
-
-        Output.announceTotalBenefitAmount(discount.getTotalDiscountPrice());
-
-        Output.announcePaymentAmountAfterDiscount(discount.getPaymentAmount(totalPriceBeforeDiscount));
-
-
-        Output.announceEventBadge(discount.getEventBadge());
+    private void updateDiscount(int totalPriceBeforeDiscount, EventManager discount) {
+        discount.updateChristmasDdayDiscount();
+        discount.updateWeekdayDiscount();
+        discount.updateWeekendDiscount();
+        discount.updateSpecialDiscount();
+        discount.updatePresentationDiscount(totalPriceBeforeDiscount);
     }
 
     private static int requestVisitDate() {

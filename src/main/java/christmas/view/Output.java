@@ -10,6 +10,10 @@ public class Output {
         System.out.println("안녕하세요! 우테코 식당 12월 이벤트 플래너입니다.");
     }
 
+    public static void announceEventBenefitPreview() {
+        System.out.println("12월 3일에 우테코 식당에서 받을 이벤트 혜택 미리 보기!");
+    }
+
     public static void announceOrderMenu(Map<String, Integer> menuNameAndQuantity) {
         System.out.println("\n<주문 메뉴>");
 
@@ -38,7 +42,12 @@ public class Output {
         System.out.println("없음");
     }
 
-    public static void announceBenefits(String benefitType, String formattedAmount) {
+    public static void announceBenefitDetails(Map<String, String> benefitDetails) {
+        benefitDetails.entrySet().stream()
+                .forEach(entry -> announceBenefits(entry.getKey(), entry.getValue()));
+    }
+
+    private static void announceBenefits(String benefitType, String formattedAmount) {
         System.out.println(benefitType + ": -" + formattedAmount + "원");
     }
 

@@ -1,8 +1,6 @@
 package christmas.domain.discount;
 
 import christmas.domain.ReservationInfo;
-import christmas.view.Output;
-import java.security.KeyStore.Entry;
 import java.text.DecimalFormat;
 import java.time.DayOfWeek;
 import java.time.LocalDate;

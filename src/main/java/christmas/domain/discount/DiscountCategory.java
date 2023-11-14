@@ -1,6 +1,10 @@
 package christmas.domain.discount;
 
 import christmas.Menu;
+import christmas.domain.discount.discountCategory.ChristmasDdayDiscount;
+import christmas.domain.discount.discountCategory.SpecialDiscount;
+import christmas.domain.discount.discountCategory.WeekdayDiscount;
+import christmas.domain.discount.discountCategory.WeekendDiscount;
 import christmas.view.Output;
 import java.text.DecimalFormat;
 import java.util.LinkedHashMap;
@@ -12,69 +16,33 @@ import java.util.stream.Collectors;
 public class DiscountCategory {
 
     private final Map<String, Integer> discountCategory;
+    private final ChristmasDdayDiscount christmasDdayDiscount;
+    private final SpecialDiscount specialDiscount;
+    private final WeekdayDiscount weekdayDiscount;
+    private final WeekendDiscount weekendDiscount;
 
     public DiscountCategory() {
         this.discountCategory = new LinkedHashMap<>();
+        this.christmasDdayDiscount = new ChristmasDdayDiscount();
+        this.specialDiscount = new SpecialDiscount();
+        this.weekdayDiscount = new WeekdayDiscount();
+        this.weekendDiscount = new WeekendDiscount();
     }
 
     public int christmasDdayDiscount(int visitDate) {
-        if(visitDate >= 1 && visitDate <= 25) {
-            int discountAmount = (1000 + (visitDate - 1) * 100);
-            discountCategory.put("크리스마스 디데이 할인", discountAmount);
-            return discountAmount;
-        }
-        return 0;
+        return christmasDdayDiscount.christmasDdayDiscount(visitDate, discountCategory);
     }
 
-
     public int specialDiscount(int visitDate) {
-        List<Integer> starDays = List.of(3, 10, 17, 24, 25);
-        if (starDays.contains(visitDate)) {
-            discountCategory.put("특별 할인", 1000);
-            return 1000;
-        }
-        return 0;
+        return specialDiscount.specialDiscount(visitDate, discountCategory);
     }
 
     public int weekdayDiscount(Map<String, Integer> menuNameAndQuantity, String dayOfWeekKorean) {
-        int discountPrice = 0;
-        if (dayOfWeekKorean.equals("일요일") || dayOfWeekKorean.equals("월요일") || dayOfWeekKorean.equals("화요일") || dayOfWeekKorean.equals("수요일")
-                || dayOfWeekKorean.equals("목요일")) {
-            for (Map.Entry<String, Integer> entry : menuNameAndQuantity.entrySet()) {
-                String menuName = entry.getKey();
-                Integer menuQuantity = entry.getValue();
-
-                String menuCategory = Menu.getMenuCategory(menuName);
-
-                if (menuCategory.equals("Dessert")) {
-                    discountPrice += 2023 * menuQuantity;
-                }
-            }
-        }
-        if (discountPrice != 0) {
-            discountCategory.put("평일 할인", discountPrice);
-        }
-        return discountPrice;
+        return weekdayDiscount.weekdayDiscount(menuNameAndQuantity, dayOfWeekKorean, discountCategory);
     }
 
     public int weekendDiscount(Map<String, Integer> menuNameAndQuantity, String dayOfWeekKorean) {
-        int discountPrice = 0;
-        if (dayOfWeekKorean.equals("금요일") || dayOfWeekKorean.equals("토요일")) {
-            for (Map.Entry<String, Integer> entry : menuNameAndQuantity.entrySet()) {
-                String menuName = entry.getKey();
-                Integer menuQuantity = entry.getValue();
-
-                String menuCategory = Menu.getMenuCategory(menuName);
-
-                if (menuCategory.equals("Main")) {
-                    discountPrice += 2023 * menuQuantity;
-                }
-            }
-        }
-        if (discountPrice != 0) {
-            discountCategory.put("주말 할인", discountPrice);
-        }
-        return discountPrice;
+        return weekendDiscount.weekendDiscount(menuNameAndQuantity, dayOfWeekKorean, discountCategory);
     }
 
     public int presentationDiscount(int totalPriceBeforeDiscount) {

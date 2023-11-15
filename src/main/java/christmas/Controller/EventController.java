@@ -6,6 +6,7 @@ import christmas.domain.ReservationInfo;
 import christmas.domain.discount.EventManager;
 import christmas.domain.discount.DiscountCategory;
 import christmas.message.ErrorMessage;
+import christmas.validator.Validator;
 import christmas.view.Input;
 import christmas.view.Output;
 import java.util.Map;
@@ -37,7 +38,9 @@ public class EventController {
         Output.announceStartEventCheck();
         while (true) {
             try {
-                return Input.visitDate();
+                int visitDate = Input.visitDate();
+                Validator.validateVisitDate(visitDate);
+                return visitDate;
             } catch (IllegalArgumentException e) {
                 Output.announceErrorMessage(ErrorMessage.INVALID_DATE);
             }
@@ -47,7 +50,9 @@ public class EventController {
     private static Map<String,Integer> requestMenuNameAndQuantity() {
         while (true) {
             try {
-                return Input.orderMenuAndQuantity();
+                Map<String, Integer> orderMenuAndQuantity = Input.orderMenuAndQuantity();
+                Validator.validateStringMenu(orderMenuAndQuantity);
+                return orderMenuAndQuantity;
             } catch (IllegalArgumentException e) {
                 Output.announceErrorMessage(ErrorMessage.INVALID_MENU);
             }

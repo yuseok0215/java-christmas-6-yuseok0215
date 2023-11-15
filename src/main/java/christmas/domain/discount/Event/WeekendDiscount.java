@@ -6,7 +6,9 @@ import java.util.Map;
 
 public class WeekendDiscount {
 
-    public int applyWeekendDiscount(Map<String, Integer> menuNameAndQuantity, String dayOfWeekKorean, Map<String, Integer> discountCategory) { int discountPrice = 0;
+    public int applyWeekendDiscount(Map<String, Integer> menuNameAndQuantity, String dayOfWeekKorean, Map<String, Integer> discountCategory) {
+        int discountPrice = 0;
+
         if (isWeekend(dayOfWeekKorean)) {
             discountPrice = checkMainMenu(menuNameAndQuantity, discountPrice);
         }

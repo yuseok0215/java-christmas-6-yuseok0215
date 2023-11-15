@@ -1,21 +1,15 @@
 package christmas.view;
 
 import camp.nextstep.edu.missionutils.Console;
-import christmas.converter.Converter;
-import christmas.option.Menu;
+import christmas.converter.TypeConverter;
 import java.util.HashMap;
 import java.util.Map;
 
 public class Input {
 
-    public static Integer visitDate() {
+    public static int visitDate() {
         System.out.println("12월 중 식당 예상 방문 날짜는 언제인가요? (숫자만 입력해 주세요!)");
-        int visitDate = Integer.parseInt(Console.readLine());
-
-        if (visitDate < 1 || visitDate > 31) {
-            throw new IllegalArgumentException();
-        }
-        return visitDate;
+        return Integer.parseInt(Console.readLine());
     }
 
     public static Map<String, Integer> orderMenuAndQuantity() {
@@ -24,9 +18,6 @@ public class Input {
         Map<String, Integer> menuNameAndQuantity = new HashMap<>();
 
         String stringMenu = Console.readLine();
-        return Converter.convertStringMenu(menuNameAndQuantity, stringMenu);
-
+        return TypeConverter.convertStringMenu(menuNameAndQuantity, stringMenu);
     }
-
-
 }

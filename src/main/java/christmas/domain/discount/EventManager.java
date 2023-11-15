@@ -1,6 +1,6 @@
 package christmas.domain.discount;
 
-import christmas.converter.Converter;
+import christmas.converter.TypeConverter;
 import christmas.domain.ReservationInfo;
 import christmas.option.Badge;
 import java.time.DayOfWeek;
@@ -66,11 +66,11 @@ public class EventManager {
     }
 
     public String getTotalDiscountPrice() {
-        return Converter.convertFormattedAmount(totalDiscountPrice);
+        return TypeConverter.convertFormattedAmount(totalDiscountPrice);
     }
 
     public String getPaymentAmount(int totalPriceBeforeDiscount) {
-        return Converter.convertFormattedAmount(totalPriceBeforeDiscount - totalPaymentDiscountPrice);
+        return TypeConverter.convertFormattedAmount(totalPriceBeforeDiscount - totalPaymentDiscountPrice);
     }
 
     public String getEventBadge() {

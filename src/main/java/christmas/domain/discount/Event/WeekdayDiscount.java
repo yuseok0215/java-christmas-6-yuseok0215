@@ -5,6 +5,7 @@ import christmas.option.Menu;
 import java.util.Map;
 
 public class WeekdayDiscount {
+
     public int applyWeekdayDiscount(Map<String, Integer> menuNameAndQuantity, String dayOfWeekKorean, Map<String, Integer> discountCategory) {
         int discountPrice = 0;
         if (isWeekday(dayOfWeekKorean)) {

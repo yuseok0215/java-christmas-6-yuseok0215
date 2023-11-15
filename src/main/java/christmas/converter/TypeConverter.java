@@ -1,13 +1,12 @@
 package christmas.converter;
 
-import christmas.option.Menu;
 import java.text.DecimalFormat;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.stream.Collectors;
 
-public class Converter {
+public class TypeConverter {
 
     private static final DecimalFormat decimalFormat = new DecimalFormat("#,###");
 
@@ -24,22 +23,12 @@ public class Converter {
 
     public static Map<String, Integer> convertStringMenu(Map<String, Integer> menuNameAndQuantity, String stringMenu) {
         String[] splitMenu = stringMenu.split(",");
+
         for (String menu : splitMenu) {
             String[] nameAndQuantity = menu.split("-");
             String menuName = nameAndQuantity[0];
-
-            if(!Menu.isMenuValid(menuName)){
-                throw new IllegalArgumentException();
-            }
-
             int menuCount = Integer.parseInt(nameAndQuantity[1]);
-            if(menuCount < 1) {
-                throw new IllegalArgumentException();
-            }
 
-            if (menuNameAndQuantity.containsKey(menuName)) {
-                throw new IllegalArgumentException();
-            }
             menuNameAndQuantity.put(menuName, menuCount);
         }
         return menuNameAndQuantity;

@@ -18,7 +18,6 @@ public enum AnnounceMessage {
     EVENT_BADGE("\n<12월 이벤트 배지>"),
     BENEFIT_DETAILS("\n<혜택 내역>");
 
-
     private final String message;
 
     AnnounceMessage(String message) {

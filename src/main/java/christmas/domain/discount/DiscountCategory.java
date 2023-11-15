@@ -1,6 +1,6 @@
 package christmas.domain.discount;
 
-import christmas.converter.Converter;
+import christmas.converter.TypeConverter;
 import christmas.domain.discount.Event.ChristmasDdayDiscount;
 import christmas.domain.discount.Event.Presentation;
 import christmas.domain.discount.Event.SpecialDiscount;
@@ -52,6 +52,6 @@ public class DiscountCategory {
     }
 
     public Map<String, String> getDiscountAmount() {
-        return Converter.convertDiscountAmount(discountCategory);
+        return TypeConverter.convertDiscountAmount(discountCategory);
     }
 }

@@ -11,7 +11,6 @@ public class TypeConverterTest {
 
     @Test
     void 금액의_포맷팅_테스트() {
-
         Map<String, Integer> discountCategory = new HashMap<>();
         discountCategory.put("크리스마스 디데이 할인", 1200);
         discountCategory.put("평일 할인", 4046);
@@ -27,7 +26,6 @@ public class TypeConverterTest {
 
     @Test
     void 문자열을_메뉴와_개수로_나누는_테스트() {
-
         Map<String, Integer> menuNameAndQuantity = new HashMap<>();
         String stringMenu = "티본스테이크-1,바비큐립-1,초코케이크-2";
 

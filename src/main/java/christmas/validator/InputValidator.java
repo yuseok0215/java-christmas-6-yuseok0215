@@ -4,7 +4,7 @@ import christmas.option.Menu;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Validator {
+public class InputValidator {
 
     public static void validateVisitDate(int visitDate) {
         if (visitDate < 1 || visitDate > 31) {
@@ -12,7 +12,7 @@ public class Validator {
         }
     }
 
-    public static void validateStringMenu(Map<String, Integer> orderMenuAndQuantity) {
+    public static void validateOrderMenuName(Map<String, Integer> orderMenuAndQuantity) {
         Map<String, Integer> tempOrderMenuAndQuantity = new HashMap<>();
 
         for (Map.Entry<String, Integer> entry : orderMenuAndQuantity.entrySet()) {

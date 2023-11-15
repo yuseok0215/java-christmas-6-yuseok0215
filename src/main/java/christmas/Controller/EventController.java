@@ -1,6 +1,6 @@
 package christmas.Controller;
 
-import christmas.Menu;
+import christmas.option.Menu;
 import christmas.domain.ReservationInfo;
 import christmas.domain.discount.EventManager;
 import christmas.domain.discount.DiscountCategory;

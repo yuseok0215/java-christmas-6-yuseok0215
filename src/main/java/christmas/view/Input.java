@@ -1,7 +1,7 @@
 package christmas.view;
 
 import camp.nextstep.edu.missionutils.Console;
-import christmas.Menu;
+import christmas.option.Menu;
 import java.util.HashMap;
 import java.util.Map;
 

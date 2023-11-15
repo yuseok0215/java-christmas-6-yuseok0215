@@ -2,7 +2,7 @@ package christmas.domain.discount;
 
 import christmas.converter.Converter;
 import christmas.domain.ReservationInfo;
-import java.text.DecimalFormat;
+import christmas.option.Badge;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.format.TextStyle;
@@ -25,13 +25,13 @@ public class EventManager {
         this.reservationInfo = reservationInfo;
     }
 
-    private static DayOfWeek getDayOfWeek(int day) {
-        return LocalDate.of(year, month, day).getDayOfWeek();
-    }
-
     public void updateChristmasDdayDiscount() {
         totalDiscountPrice += discountCategory.christmasDdayDiscount(reservationInfo.getVisitDate());
         totalPaymentDiscountPrice += discountCategory.christmasDdayDiscount(reservationInfo.getVisitDate());
+    }
+
+    private static DayOfWeek getDayOfWeek(int day) {
+        return LocalDate.of(year, month, day).getDayOfWeek();
     }
 
     public void updateWeekdayDiscount() {
@@ -74,13 +74,6 @@ public class EventManager {
     }
 
     public String getEventBadge() {
-        if (totalDiscountPrice >= 20000) {
-            return "산타";
-        } else if (totalDiscountPrice >= 10000) {
-            return "트리";
-        } else if (totalDiscountPrice >= 5000) {
-            return "별";
-        }
-        return "없음";
+        return Badge.getEventBadge(totalDiscountPrice);
     }
 }

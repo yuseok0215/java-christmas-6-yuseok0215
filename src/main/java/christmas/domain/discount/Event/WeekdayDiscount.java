@@ -1,6 +1,6 @@
 package christmas.domain.discount.Event;
 
-import christmas.Menu;
+import christmas.option.Menu;
 import java.util.Map;
 
 public class WeekdayDiscount {

@@ -1,4 +1,4 @@
-package christmas;
+package christmas.option;
 
 import java.util.Arrays;
 

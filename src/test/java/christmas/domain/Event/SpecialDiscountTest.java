@@ -1,4 +1,4 @@
-package christmas.domain;
+package christmas.domain.Event;
 
 import christmas.domain.discount.DiscountCategory;
 import christmas.domain.discount.Event.SpecialDiscount;

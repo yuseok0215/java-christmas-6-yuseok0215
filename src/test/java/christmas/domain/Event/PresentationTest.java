@@ -1,4 +1,4 @@
-package christmas.domain;
+package christmas.domain.Event;
 
 import christmas.domain.discount.Event.Presentation;
 import java.util.HashMap;

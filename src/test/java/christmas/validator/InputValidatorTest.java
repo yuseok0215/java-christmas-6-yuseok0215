@@ -23,7 +23,6 @@ public class InputValidatorTest {
 
     @Test
     public void 올바른_주문_메뉴_입력에_대한_예외처리_테스트() {
-
         Map<String, Integer> orderMenuAndQuantity = new HashMap<>();
         orderMenuAndQuantity.put("해산물파스타", 2);
         orderMenuAndQuantity.put("아이스크림", 1);
@@ -33,7 +32,6 @@ public class InputValidatorTest {
 
     @Test
     public void 올바르지_않은_주문_메뉴_입력에_대한_예외처리_테스트() {
-        // Arrange
         Map<String, Integer> orderMenuAndQuantity = new HashMap<>();
         orderMenuAndQuantity.put("해산물 파스타", 2);
         orderMenuAndQuantity.put("아이스크림", 1);

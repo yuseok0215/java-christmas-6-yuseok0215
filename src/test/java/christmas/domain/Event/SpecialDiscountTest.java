@@ -15,7 +15,7 @@ public class SpecialDiscountTest {
 
         Map<String, Integer> discountCategory = new HashMap<>();
         int validVisitDate = 3;
-        int discountAmount = specialDiscount.specialDiscount(validVisitDate, discountCategory);
+        int discountAmount = specialDiscount.applySpecialDiscount(validVisitDate, discountCategory);
 
         Assertions.assertEquals(1000, discountAmount);
         Assertions.assertEquals(1000, discountCategory.get("특별 할인"));
@@ -24,7 +24,7 @@ public class SpecialDiscountTest {
         discountCategory.clear();
 
         int invalidVisitDate = 11;
-        discountAmount = specialDiscount.specialDiscount(invalidVisitDate, discountCategory);
+        discountAmount = specialDiscount.applySpecialDiscount(invalidVisitDate, discountCategory);
 
         Assertions.assertEquals(0, discountAmount);
         Assertions.assertFalse(discountCategory.containsKey("특별 할인"));

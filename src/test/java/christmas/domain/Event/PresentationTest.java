@@ -15,7 +15,7 @@ public class PresentationTest {
         int validTotalPriceBeforeDiscount = 130000;
         Map<String, Integer> discountCategory = new HashMap<>();
 
-        int discountAmount = presentation.presentationEvent(validTotalPriceBeforeDiscount, discountCategory);
+        int discountAmount = presentation.applyPresentationEvent(validTotalPriceBeforeDiscount, discountCategory);
 
         Assertions.assertEquals(25000, discountAmount);
         Assertions.assertEquals(25000, discountCategory.get("증정 이벤트"));
@@ -25,7 +25,7 @@ public class PresentationTest {
 
         int invalidTotalPriceBeforeDiscount = 110000;
 
-        discountAmount = presentation.presentationEvent(invalidTotalPriceBeforeDiscount, discountCategory);
+        discountAmount = presentation.applyPresentationEvent(invalidTotalPriceBeforeDiscount, discountCategory);
 
         Assertions.assertEquals(0, discountAmount);
         Assertions.assertFalse(discountCategory.containsKey("증정 이벤트"));

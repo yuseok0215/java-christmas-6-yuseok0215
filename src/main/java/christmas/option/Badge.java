@@ -18,9 +18,11 @@ public enum Badge {
     public static String getEventBadge(int totalDiscountPrice) {
         if (totalDiscountPrice >= SANTA.priceStandard) {
             return SANTA.badgeName;
-        } else if (totalDiscountPrice >= TREE.priceStandard) {
+        }
+        if (totalDiscountPrice >= TREE.priceStandard) {
             return TREE.badgeName;
-        } else if (totalDiscountPrice >= STAR.priceStandard) {
+        }
+        if (totalDiscountPrice >= STAR.priceStandard) {
             return STAR.badgeName;
         }
         return NOTHING.badgeName;

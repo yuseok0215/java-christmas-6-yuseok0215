@@ -23,7 +23,7 @@ public class WeekendDiscountTest {
         String dayOfWeekKorean = "토요일";
         Map<String, Integer> discountCategory = new HashMap<>();
 
-        int discountAmount = weekendDiscount.weekendDiscount(menuNameAndQuantity, dayOfWeekKorean, discountCategory);
+        int discountAmount = weekendDiscount.applyWeekendDiscount(menuNameAndQuantity, dayOfWeekKorean, discountCategory);
 
         assertEquals(2023 * 3, discountAmount);
         assertTrue(discountCategory.containsKey("주말 할인"));
@@ -41,7 +41,7 @@ public class WeekendDiscountTest {
         String dayOfWeekKorean = "토요일";
         Map<String, Integer> discountCategory = new HashMap<>();
 
-        int discountAmount = weekendDiscount.weekendDiscount(menuNameAndQuantity, dayOfWeekKorean, discountCategory);
+        int discountAmount = weekendDiscount.applyWeekendDiscount(menuNameAndQuantity, dayOfWeekKorean, discountCategory);
 
         assertEquals(0, discountAmount);
         assertFalse(discountCategory.containsKey("주말 할인"));
@@ -58,7 +58,7 @@ public class WeekendDiscountTest {
         String dayOfWeekKorean = "화요일";
         Map<String, Integer> discountCategory = new HashMap<>();
 
-        int discountAmount = weekendDiscount.weekendDiscount(menuNameAndQuantity, dayOfWeekKorean, discountCategory);
+        int discountAmount = weekendDiscount.applyWeekendDiscount(menuNameAndQuantity, dayOfWeekKorean, discountCategory);
 
         assertEquals(0, discountAmount);
         assertFalse(discountCategory.containsKey("주말 할인"));

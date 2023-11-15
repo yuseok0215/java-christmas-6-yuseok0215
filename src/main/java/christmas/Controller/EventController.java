@@ -1,5 +1,6 @@
 package christmas.Controller;
 
+import christmas.option.Event;
 import christmas.option.Menu;
 import christmas.domain.ReservationInfo;
 import christmas.domain.discount.EventManager;
@@ -25,27 +26,11 @@ public class EventController {
         updateDiscount(totalPriceBeforeDiscount, discount);
         presentationEvent(discount);
 
-        System.out.println("\n<혜택 내역>");
+        Output.announceStartBenefits();
         Output.announceBenefitDetails(discount.getBenefitDetails());
         Output.announceTotalBenefitAmount(discount.getTotalDiscountPrice());
         Output.announcePaymentAmountAfterDiscount(discount.getPaymentAmount(totalPriceBeforeDiscount));
         Output.announceEventBadge(discount.getEventBadge());
-    }
-
-    private void presentationEvent(EventManager discount) {
-        if (discount.hasPresentationMenu("증정 이벤트")) {
-            Output.announcePresentChampagne();
-        } else if (!discount.hasPresentationMenu("증정 이벤트")) {
-            Output.announcePresentAbsence();
-        }
-    }
-
-    private void updateDiscount(int totalPriceBeforeDiscount, EventManager discount) {
-        discount.updateChristmasDdayDiscount();
-        discount.updateWeekdayDiscount();
-        discount.updateWeekendDiscount();
-        discount.updateSpecialDiscount();
-        discount.updatePresentationDiscount(totalPriceBeforeDiscount);
     }
 
     private static int requestVisitDate() {
@@ -71,6 +56,7 @@ public class EventController {
 
     private static int getTotalPriceBeforeDiscount(Map<String, Integer> menuNameAndQuantity) {
         int totalPriceBeforeDiscount = 0;
+
         for (Map.Entry<String, Integer> entry : menuNameAndQuantity.entrySet()) {
             String menuName = entry.getKey();
             int menuPrice = Menu.getMenuByName(menuName) * entry.getValue();
@@ -78,5 +64,21 @@ public class EventController {
             totalPriceBeforeDiscount += menuPrice;
         }
         return totalPriceBeforeDiscount;
+    }
+
+    private void updateDiscount(int totalPriceBeforeDiscount, EventManager discount) {
+        discount.updateChristmasDdayDiscount();
+        discount.updateWeekdayDiscount();
+        discount.updateWeekendDiscount();
+        discount.updateSpecialDiscount();
+        discount.updatePresentationDiscount(totalPriceBeforeDiscount);
+    }
+
+    private void presentationEvent(EventManager discount) {
+        if (discount.hasPresentationMenu(Event.PRESENTATION.getEventName())) {
+            Output.announcePresentChampagne();
+            return;
+        }
+        Output.announcePresentAbsence();
     }
 }

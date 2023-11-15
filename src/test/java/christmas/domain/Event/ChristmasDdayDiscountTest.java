@@ -16,7 +16,7 @@ public class ChristmasDdayDiscountTest {
         HashMap<String, Integer> discountCategory = new HashMap<>();
 
         int validVisitDate = 15;
-        int discountAmount = discountCalculator.christmasDdayDiscount(validVisitDate, discountCategory);
+        int discountAmount = discountCalculator.applyChristmasDdayDiscount(validVisitDate, discountCategory);
 
         assertTrue(discountCategory.containsKey("크리스마스 디데이 할인"));
         assertEquals(discountAmount, discountCategory.get("크리스마스 디데이 할인"));
@@ -29,7 +29,7 @@ public class ChristmasDdayDiscountTest {
         HashMap<String, Integer> discountCategory = new HashMap<>();
 
         int validVisitDate = 30;
-        int discountAmount = discountCalculator.christmasDdayDiscount(validVisitDate, discountCategory);
+        int discountAmount = discountCalculator.applyChristmasDdayDiscount(validVisitDate, discountCategory);
 
         assertFalse(discountCategory.containsKey("크리스마스 디데이 할인"));
         assertEquals(0, discountAmount);

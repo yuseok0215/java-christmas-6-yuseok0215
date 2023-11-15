@@ -48,8 +48,7 @@ public class Output {
             System.out.println("없음");
             return;
         }
-        benefitDetails.entrySet().stream()
-                .forEach(entry -> announceBenefits(entry.getKey(), entry.getValue()));
+        benefitDetails.forEach(Output::announceBenefits);
     }
 
     private static void announceBenefits(String benefitType, String formattedAmount) {
@@ -71,7 +70,12 @@ public class Output {
         System.out.println(badge);
     }
 
+    public static void announceStartBenefits() {
+        System.out.println("\n<혜택 내역>");
+    }
+
     public static void announceErrorMessage(ErrorMessage errorMessage) {
         System.out.println(errorMessage.getMessage());
     }
+
 }

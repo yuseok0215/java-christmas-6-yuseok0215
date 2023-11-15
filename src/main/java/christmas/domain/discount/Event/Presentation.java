@@ -6,7 +6,7 @@ import java.util.Map;
 
 public class Presentation {
 
-    public int presentationEvent(int totalPriceBeforeDiscount, Map<String, Integer> discountCategory) {
+    public int applyPresentationEvent(int totalPriceBeforeDiscount, Map<String, Integer> discountCategory) {
         if (totalPriceBeforeDiscount >= 120000) {
             discountCategory.put(Event.PRESENTATION.getEventName(), 25000);
             Output.announcePresentChampagne();

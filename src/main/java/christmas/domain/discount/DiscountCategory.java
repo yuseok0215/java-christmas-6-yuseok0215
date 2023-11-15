@@ -28,26 +28,26 @@ public class DiscountCategory {
     }
 
     public int christmasDdayDiscount(int visitDate) {
-        return christmasDdayDiscount.christmasDdayDiscount(visitDate, discountCategory);
+        return christmasDdayDiscount.applyChristmasDdayDiscount(visitDate, discountCategory);
     }
 
     public int specialDiscount(int visitDate) {
-        return specialDiscount.specialDiscount(visitDate, discountCategory);
+        return specialDiscount.applySpecialDiscount(visitDate, discountCategory);
     }
 
     public int weekdayDiscount(Map<String, Integer> menuNameAndQuantity, String dayOfWeekKorean) {
-        return weekdayDiscount.weekdayDiscount(menuNameAndQuantity, dayOfWeekKorean, discountCategory);
+        return weekdayDiscount.applyWeekdayDiscount(menuNameAndQuantity, dayOfWeekKorean, discountCategory);
     }
 
     public int weekendDiscount(Map<String, Integer> menuNameAndQuantity, String dayOfWeekKorean) {
-        return weekendDiscount.weekendDiscount(menuNameAndQuantity, dayOfWeekKorean, discountCategory);
+        return weekendDiscount.applyWeekendDiscount(menuNameAndQuantity, dayOfWeekKorean, discountCategory);
     }
 
     public int presentationDiscount(int totalPriceBeforeDiscount) {
-        return presentation.presentationEvent(totalPriceBeforeDiscount, discountCategory);
+        return presentation.applyPresentationEvent(totalPriceBeforeDiscount, discountCategory);
     }
 
-    public boolean hasPresentationEvent(String eventType) {
+    public boolean checkPresentationEvent(String eventType) {
         return discountCategory.containsKey(eventType);
     }
 

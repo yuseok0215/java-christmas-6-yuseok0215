@@ -58,7 +58,7 @@ public class EventManager {
     }
 
     public boolean hasPresentationMenu(String eventType) {
-        return discountCategory.hasPresentationEvent(eventType);
+        return discountCategory.checkPresentationEvent(eventType);
     }
 
     public Map<String, String> getBenefitDetails() {

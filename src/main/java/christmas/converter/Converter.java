@@ -1,5 +1,6 @@
 package christmas.converter;
 
+import christmas.option.Menu;
 import java.text.DecimalFormat;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -19,6 +20,29 @@ public class Converter {
                         (v1, v2) -> v1,
                         LinkedHashMap::new
                 ));
+    }
+
+    public static Map<String, Integer> convertStringMenu(Map<String, Integer> menuNameAndQuantity, String stringMenu) {
+        String[] splitMenu = stringMenu.split(",");
+        for (String menu : splitMenu) {
+            String[] split = menu.split("-");
+            String menuName = split[0];
+            if(!Menu.isMenuValid(menuName)){
+                throw new IllegalArgumentException();
+            }
+
+            int menuCount = Integer.parseInt(split[1]);
+
+            if(menuCount < 1) {
+                throw new IllegalArgumentException();
+            }
+
+            if (menuNameAndQuantity.containsKey(menuName)) {
+                throw new IllegalArgumentException();
+            }
+            menuNameAndQuantity.put(menuName, menuCount);
+        }
+        return menuNameAndQuantity;
     }
 
     public static String convertFormattedAmount(int amount) {

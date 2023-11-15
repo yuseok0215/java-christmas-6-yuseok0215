@@ -1,6 +1,7 @@
 package christmas.view;
 
 import camp.nextstep.edu.missionutils.Console;
+import christmas.converter.Converter;
 import christmas.option.Menu;
 import java.util.HashMap;
 import java.util.Map;
@@ -18,26 +19,9 @@ public class Input {
         Map<String, Integer> menuNameAndQuantity = new HashMap<>();
 
         String stringMenu = Console.readLine();
-        String[] splitMenu = stringMenu.split(",");
-        for (String menu : splitMenu) {
-            String[] split = menu.split("-");
-            String menuName = split[0];
-            if(!Menu.isMenuValid(menuName)){
-                throw new IllegalArgumentException();
-            }
-
-            int menuCount = Integer.parseInt(split[1]);
-
-            if(menuCount < 1) {
-                throw new IllegalArgumentException();
-            }
-
-            if (menuNameAndQuantity.containsKey(menuName)) {
-                throw new IllegalArgumentException();
-            }
-            menuNameAndQuantity.put(menuName, menuCount);
-        }
-        return menuNameAndQuantity;
+        return Converter.convertStringMenu(menuNameAndQuantity, stringMenu);
 
     }
+
+
 }

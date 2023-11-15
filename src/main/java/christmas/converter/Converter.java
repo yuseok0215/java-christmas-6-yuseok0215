@@ -25,14 +25,14 @@ public class Converter {
     public static Map<String, Integer> convertStringMenu(Map<String, Integer> menuNameAndQuantity, String stringMenu) {
         String[] splitMenu = stringMenu.split(",");
         for (String menu : splitMenu) {
-            String[] split = menu.split("-");
-            String menuName = split[0];
+            String[] nameAndQuantity = menu.split("-");
+            String menuName = nameAndQuantity[0];
+
             if(!Menu.isMenuValid(menuName)){
                 throw new IllegalArgumentException();
             }
 
-            int menuCount = Integer.parseInt(split[1]);
-
+            int menuCount = Integer.parseInt(nameAndQuantity[1]);
             if(menuCount < 1) {
                 throw new IllegalArgumentException();
             }

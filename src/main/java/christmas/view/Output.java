@@ -1,77 +1,78 @@
 package christmas.view;
 
+import static christmas.option.AnnounceMessage.*;
+
 import christmas.message.ErrorMessage;
 import java.text.DecimalFormat;
 import java.util.Map;
-import java.util.Map.Entry;
 
 public class Output {
 
     public static void announceStartEventCheck() {
-        System.out.println("안녕하세요! 우테코 식당 12월 이벤트 플래너입니다.");
+        System.out.println(START_PLANNER.getMessage());
     }
 
     public static void announceEventBenefitPreview(int visitDate) {
-        System.out.println("12월 " + visitDate + "일에 우테코 식당에서 받을 이벤트 혜택 미리 보기!");
+        System.out.printf((EVENT_PREVIEW.getMessage()) + "%n", visitDate);
     }
 
     public static void announceOrderMenu(Map<String, Integer> menuNameAndQuantity) {
-        System.out.println("\n<주문 메뉴>");
+        System.out.println(ORDER_MENU.getMessage());
 
         for (Map.Entry<String, Integer> entry : menuNameAndQuantity.entrySet()) {
             String menuName = entry.getKey();
             Integer menuQuantity = entry.getValue();
-            System.out.println(menuName + " " + menuQuantity + "개");
+            System.out.printf((MENU_QUANTITY.getMessage()) + "%n", menuName, menuQuantity);
         }
     }
 
     public static void announceOrderAmountBeforeDiscount(int totalPriceBeforeDiscount) {
-        System.out.println("\n<할인 전 총주문 금액>");
+        System.out.println(TOTAL_AMOUNT_BEFORE_DISCOUNT.getMessage());
 
         DecimalFormat decimalFormat = new DecimalFormat("#,###");
         String formattedPrice = decimalFormat.format(totalPriceBeforeDiscount);
-        System.out.println(formattedPrice + "원");
+        System.out.printf((FORMATTED_AMOUNT.getMessage()) + "%n", formattedPrice);
     }
 
     public static void announcePresentChampagne() {
-        System.out.println("\n<증정 메뉴>");
-        System.out.println("샴페인 1개");
+        System.out.println(PRESENTATION_MENU.getMessage());
+        System.out.println(PRESENTATION_ITEM.getMessage());
     }
 
     public static void announcePresentAbsence() {
-        System.out.println("\n<증정 메뉴>");
-        System.out.println("없음");
+        System.out.println(PRESENTATION_MENU.getMessage());
+        System.out.println(EMPTY.getMessage());
     }
 
     public static void announceBenefitDetails(Map<String, String> benefitDetails) {
         if(benefitDetails.size() == 0) {
-            System.out.println("없음");
+            System.out.println(EMPTY.getMessage());
             return;
         }
         benefitDetails.forEach(Output::announceBenefits);
     }
 
     private static void announceBenefits(String benefitType, String formattedAmount) {
-        System.out.println(benefitType + ": -" + formattedAmount + "원");
+        System.out.printf((DISCOUNT_AMOUNT.getMessage()) + "%n", benefitType, formattedAmount);
     }
 
     public static void announceTotalBenefitAmount(String totalBenefitAmount) {
-        System.out.println("\n<총혜택 금액>");
-        System.out.println(totalBenefitAmount + "원");
+        System.out.println(TOTAL_BENEFIT_AMOUNT.getMessage());
+        System.out.printf((FORMATTED_AMOUNT.getMessage()) + "%n", totalBenefitAmount);
     }
 
     public static void announcePaymentAmountAfterDiscount(String paymentAmount) {
-        System.out.println("\n<할인 후 예상 결제 금액>");
-        System.out.println(paymentAmount + "원");
+        System.out.println(EXPECTED_AMOUNT_AFTER_DISCOUNT.getMessage());
+        System.out.printf((FORMATTED_AMOUNT.getMessage()) + "%n", paymentAmount);
     }
 
     public static void announceEventBadge(String badge) {
-        System.out.println("\n<12월 이벤트 배지>");
+        System.out.println(EVENT_BADGE.getMessage());
         System.out.println(badge);
     }
 
     public static void announceStartBenefits() {
-        System.out.println("\n<혜택 내역>");
+        System.out.println(BENEFIT_DETAILS.getMessage());
     }
 
     public static void announceErrorMessage(ErrorMessage errorMessage) {

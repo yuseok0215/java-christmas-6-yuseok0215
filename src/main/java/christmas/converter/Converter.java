@@ -1,6 +1,7 @@
 package christmas.converter;
 
 import java.text.DecimalFormat;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.stream.Collectors;
@@ -14,7 +15,9 @@ public class Converter {
                 .filter(entry -> entry.getValue() != 0)
                 .collect(Collectors.toMap(
                         Entry::getKey,
-                        entry -> decimalFormat.format(entry.getValue())
+                        entry -> decimalFormat.format(entry.getValue()),
+                        (v1, v2) -> v1,
+                        LinkedHashMap::new
                 ));
     }
 

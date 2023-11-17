@@ -4,6 +4,7 @@ import static camp.nextstep.edu.missionutils.test.Assertions.assertSimpleTest;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import camp.nextstep.edu.missionutils.test.NsTest;
+import christmas.option.Menu;
 import org.junit.jupiter.api.Test;
 
 class ApplicationTest extends NsTest {
@@ -47,6 +48,13 @@ class ApplicationTest extends NsTest {
             runException("3", "제로콜라-a");
             assertThat(output()).contains("[ERROR] 유효하지 않은 주문입니다. 다시 입력해 주세요.");
         });
+    }
+
+    @Test
+    void 없는_메뉴_입력_예외_테스트() {
+        String menu = "ex";
+
+        org.junit.jupiter.api.Assertions.assertFalse(Menu.isMenuValid(menu));
     }
 
     @Override
